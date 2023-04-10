@@ -15,14 +15,11 @@ import LockIcon from "@mui/icons-material/Lock";
 import { Link } from "react-router-dom";
 import { Memories } from "./dialogbox";
 
-
 export function Home() {
   const navigate = useNavigate();
   let [email, setEmail] = useState("");
   let [password, setPassword] = useState("");
   let [error, setError] = useState("");
-
-
 
   const paperStyle = {
     padding: 20,
@@ -35,9 +32,8 @@ export function Home() {
   const handelSubmit = async (e) => {
     let obj = { email: email, password: password };
     e.preventDefault();
-   setError(validate(obj))
+    setError(validate(obj));
 
-    
     let result = await fetch("http://localhost:5000/api/accounts/login", {
       method: "POST",
       headers: {
@@ -52,23 +48,21 @@ export function Home() {
     console.log(result);
   };
 
-  const validate = (values) =>{
+  const validate = (values) => {
     const error = {};
-    const regex = /^[0-9]$/i
-    if(!email){
-      error.email = "email is required"
+    const regex = /^[0-9]$/i;
+    if (!email) {
+      error.email = "email is required";
     }
-    if(! password){
-      error.password = "password is required"
+    if (!password) {
+      error.password = "password is required";
     }
-  }
-
+  };
 
   const avatarStyle = { backgroundColor: "#1bbd7e" };
   return (
-    
     <div>
-      <Memories/>
+      <Memories />
 
       <div>
         <Grid>
