@@ -3,16 +3,14 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 export function Map() {
   const [data, setData] = useState([]);
 
-  console.log(data);
+  // useEffect(() => {
+  //   if (data.length) localStorage.setItem("data", JSON.stringify(data));
+  // }, [data]);
 
-  useEffect(() => {
-    if (data.length) localStorage.setItem("data", JSON.stringify(data));
-  }, [data]);
-
-  useEffect(() => {
-    console.log(JSON.parse(localStorage.getItem("data") || []));
-    setData(JSON.parse(localStorage.getItem("data") || []));
-  }, []);
+  // useEffect(() => {
+  //   console.log(JSON.parse(localStorage.getItem("data") || []));
+  //   setData(JSON.parse(localStorage.getItem("data") || []));
+  // }, []);
 
   const mapRef = useRef();
 
@@ -41,17 +39,17 @@ export function Map() {
     });
     mapRef.current.addListener("click", getLatLang);
 
-    setData((data) => {
-      data.forEach((position) => {
-        new window.mappls.Marker({
-          map: mapRef.current,
-          position: position,
-          icon_url: "https://apis.mapmyindia.com/map_v3/1.png",
-        });
-      });
+    // setData((data) => {
+    //   data.forEach((position) => {
+    //     new window.mappls.Marker({
+    //       map: mapRef.current,
+    //       position: position,
+    //       icon_url: "https://apis.mapmyindia.com/map_v3/1.png",
+    //     });
+    //   });
 
-      return data;
-    });
+    //   return data;
+    // });
   }, []);
 
   function loadScript() {
