@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Route, NavLink, useNavigate } from "react-router-dom";
-
 import {
   TextField,
   Grid,
@@ -14,6 +13,10 @@ import {
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { Link } from "react-router-dom";
 
+
+
+
+
 export function SignUp() {
   let navigate = useNavigate();
   const [name, setName] = useState("");
@@ -22,6 +25,7 @@ export function SignUp() {
   const [confPassword, setConfPassword] = useState("");
   const [phone, setPhone] = useState("");
 
+ 
   const paperStyle = {
     padding: 20,
     height: "95vh",
@@ -31,9 +35,11 @@ export function SignUp() {
   };
 
   const handel = async (e) => {
+    
     e.preventDefault();
     let obj = { name: name, email: email, password: password, phone: phone };
-
+    
+   
     let result = await fetch("http://localhost:5000/api/accounts/register", {
       method: "POST",
       headers: {
@@ -43,7 +49,7 @@ export function SignUp() {
       body: JSON.stringify(obj),
     });
     console.log(result);
-    
+
     result = await result.json();
     if (result.status) navigate("/");
     console.log(result);
@@ -53,6 +59,7 @@ export function SignUp() {
 
   return (
     <div>
+
       <Grid>
         <Paper elevation={10} style={paperStyle}>
           <Grid align="center">
@@ -146,3 +153,5 @@ export function SignUp() {
     </div>
   );
 }
+
+

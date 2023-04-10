@@ -6,6 +6,7 @@ const env = require("dotenv");
 const app = express();
 app.use(express.json());
 
+
 app.use(cors());
 mongoose
   .connect(
@@ -14,7 +15,7 @@ mongoose
   .then(() => {
     console.log("MONGO DB is connect");
   })
-  .catch(() => {
+  .catch((err) => {
     console.log(err.message);
   });
 

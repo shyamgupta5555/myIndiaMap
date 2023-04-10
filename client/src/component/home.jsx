@@ -13,11 +13,17 @@ import {
 } from "@mui/material";
 import LockIcon from "@mui/icons-material/Lock";
 import { Link } from "react-router-dom";
+import { Memories } from "./dialogbox";
+
 
 export function Home() {
   const navigate = useNavigate();
   let [email, setEmail] = useState("");
   let [password, setPassword] = useState("");
+  let [error, setError] = useState("");
+
+
+
   const paperStyle = {
     padding: 20,
     height: "75vh",
@@ -27,8 +33,11 @@ export function Home() {
   };
 
   const handelSubmit = async (e) => {
-    e.preventDefault();
     let obj = { email: email, password: password };
+    e.preventDefault();
+   setError(validate(obj))
+
+    
     let result = await fetch("http://localhost:5000/api/accounts/login", {
       method: "POST",
       headers: {
@@ -43,9 +52,24 @@ export function Home() {
     console.log(result);
   };
 
+  const validate = (values) =>{
+    const error = {};
+    const regex = /^[0-9]$/i
+    if(!email){
+      error.email = "email is required"
+    }
+    if(! password){
+      error.password = "password is required"
+    }
+  }
+
+
   const avatarStyle = { backgroundColor: "#1bbd7e" };
   return (
+    
     <div>
+      <Memories/>
+
       <div>
         <Grid>
           <Paper elevation={10} style={paperStyle}>
