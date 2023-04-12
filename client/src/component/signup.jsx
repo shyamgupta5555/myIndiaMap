@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Route, NavLink, useNavigate } from "react-router-dom";
 import {
   TextField,
@@ -12,10 +12,8 @@ import {
 } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { Link } from "react-router-dom";
-
-
-
-
+import axios from "axios";
+import { Card1 } from "./showMemories";
 
 export function SignUp() {
   let navigate = useNavigate();
@@ -24,8 +22,8 @@ export function SignUp() {
   const [password, setPassword] = useState("");
   const [confPassword, setConfPassword] = useState("");
   const [phone, setPhone] = useState("");
+  const [error, setError] = useState("");
 
- 
   const paperStyle = {
     padding: 20,
     height: "95vh",
@@ -35,31 +33,30 @@ export function SignUp() {
   };
 
   const handel = async (e) => {
-    
     e.preventDefault();
     let obj = { name: name, email: email, password: password, phone: phone };
-    
-   
-    let result = await fetch("http://localhost:5000/api/accounts/register", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(obj),
-    });
-    console.log(result);
+    console.log(obj);
 
-    result = await result.json();
-    if (result.status) navigate("/");
-    console.log(result);
+    axios
+      .post("http://localhost:5000/api/accounts/register", obj)
+      .then((response) => {
+        setError("");
+        console.log(response.data)
+        localStorage.setItem("id", response.data._id);
+        
+        if (response) navigate("/map");
+      })
+      .catch((error) => {
+        setError(error.response.data.message);
+      });
+    console.log(error);
   };
 
   const avatarStyle = { backgroundColor: "#1bbd7e" };
 
   return (
     <div>
-
+    {/* <Card1 /> */}
       <Grid>
         <Paper elevation={10} style={paperStyle}>
           <Grid align="center">
@@ -69,7 +66,15 @@ export function SignUp() {
           </Grid>
           <br />
           <h1 style={{ "text-align": "center" }}>Create Account</h1>
-          <div style={{ width: 300, "padding-left": "50px" }}>
+          <div
+            style={{
+              width: 300,
+              "border-radius": "30px",
+              "padding-left": "50px",
+            }}
+          >
+            {error && <p className="alert alert-danger">{error}</p>}
+
             <TextField
               variant="outlined"
               label="name"
@@ -153,5 +158,3 @@ export function SignUp() {
     </div>
   );
 }
-
-

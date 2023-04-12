@@ -18,16 +18,16 @@ exports.authentication = async (req, res, next) => {
   }
 };
 
-// exports.authorization = async (req, res, next) => {
-//   try {
-//     console.log(req.id)
-//     let user = req.id;
-//     if (id !== user)
-//       return res
-//         .status(400)
-//         .send({ status: false, message: "user id not valid" });
-//     next();
-//   } catch (err) {
-//     return res.status(500).send({ status: false, message: err.message });
-//   }
-// };
+exports.authorization = async (req, res, next) => {
+  try {
+   
+    let user = req.id;
+    if (req.body.userId !== user)
+      return res
+        .status(400)
+        .send({ status: false, message: "user id not valid" });
+    next();
+  } catch (err) {
+    return res.status(500).send({ status: false, message: err.message });
+  }
+};

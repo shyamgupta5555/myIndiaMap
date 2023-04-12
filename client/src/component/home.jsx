@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Route, useNavigate, NavLink } from "react-router-dom";
+import axios from "axios";
 
 import {
   TextField,
@@ -13,7 +14,8 @@ import {
 } from "@mui/material";
 import LockIcon from "@mui/icons-material/Lock";
 import { Link } from "react-router-dom";
-import { Memories } from "./dialogbox";
+
+
 
 export function Home() {
   const navigate = useNavigate();
@@ -34,18 +36,20 @@ export function Home() {
     e.preventDefault();
     setError(validate(obj));
 
-    let result = await fetch("http://localhost:5000/api/accounts/login", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(obj),
-    });
+    axios
+      .post("http://localhost:5000/api/accounts/login", obj)
+      .then((response) => {
+        const token = response.data.token;
+        localStorage.setItem("token", token);
+        localStorage.setItem( "id",response.data.id);
+        console.log(response.data)
 
-    result = await result.json();
-    if (result.status) navigate("/signup");
-    console.log(result);
+        if (response) navigate("/map");
+      })
+
+      .catch((error) => {
+        setError(error.response.data.message);
+      });
   };
 
   const validate = (values) => {
@@ -62,8 +66,6 @@ export function Home() {
   const avatarStyle = { backgroundColor: "#1bbd7e" };
   return (
     <div>
-      <Memories />
-
       <div>
         <Grid>
           <Paper elevation={10} style={paperStyle}>
@@ -76,6 +78,7 @@ export function Home() {
             <h1 style={{ "text-align": "center" }}>LogIn</h1>
             <div style={{ padding: "30px" }}>
               <br />
+              {error && <p className="alert alert-danger">{error}</p>}
               <TextField
                 variant="outlined"
                 label="Email"

@@ -7,15 +7,18 @@ const {
   memoriesDelete,
   memoriesGet,
 } = require("../controller/memoriesController");
-const { authentication } = require("../middleware/auth");
+
+const { authentication ,authorization } = require("../middleware/auth");
 
 route.post("/api/accounts/register", userCreate);
 route.post("/api/accounts/login", login);
 
-route.post("/api/users/memories", authentication, memoriesCreate);
-route.get("/api/users/memories",  memoriesGet);
-route.put("/api/users/memories/:id", authentication, memoriesUpdate);
+route.post("/api/users/memories",authentication, authorization, memoriesCreate);
+route.get("/api/users/memories",  authentication,  memoriesGet);
 
-route.delete("/api/users/memories/:id", authentication, memoriesDelete);
+route.put("/api/users/memories/:id", authentication,  authorization, memoriesUpdate);
+
+route.delete("/api/users/memories/:id", authentication,  authorization ,memoriesDelete);
+
 
 module.exports = route;

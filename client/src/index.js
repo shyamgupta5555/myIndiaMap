@@ -1,18 +1,18 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { Routes, BrowserRouter, Route } from "react-router-dom";
-import { Home } from "./component/home";
-import { SignUp } from "./component/signup";
+import {BrowserRouter } from "react-router-dom";
 import "./index.css";
-import { Map } from "./component/map";
+import App from "./App";
+import { Navbar } from "./component/navbar";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
+  <>
+  {/* <Navbar /> */}
   <BrowserRouter>
-    <Routes>
-      <Route path="/" element={<Map />} />
-      <Route path="/signup" element={<SignUp />} />
-    </Routes>
+    <App />
   </BrowserRouter>
+
+  </>
 );

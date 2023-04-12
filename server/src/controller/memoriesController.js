@@ -8,15 +8,16 @@ const { memoriesSchema, memoriesUp } = require("../validation/validation");
 exports.memoriesCreate = async (req, res) => {
   try {
     let data = req.body;
-    await memoriesSchema.validateAsync(data);
+    // await memoriesSchema.validateAsync(data);
     data.userId = req.id;
     console.log(data);
 
     const create = await memoriesModel.create(data);
+    console.log(create);
     return res.status(201).send({ data: create });
   } catch (error) {
     if (error.isJoi == true) error.status = 400;
-    return res.status(error.status).send({ message: error.message });
+    return res.status(500).send({ message: error.message });
   }
 };
 
@@ -24,8 +25,8 @@ exports.memoriesUpdate = async (req, res) => {
   try {
     const id = req.params.id;
     const data = req.body;
-    const { content, lat, lang } = data;
-
+    const { content, lat, lng } = data;
+    console.log(FormData);
     await memoriesUp.validateAsync(data);
 
     if (!ObjectId.isValid(id))
@@ -41,11 +42,11 @@ exports.memoriesUpdate = async (req, res) => {
     return res.status(200).send({ data: update });
   } catch (error) {
     if (error.isJoi == true) error.status = 400;
-    return res
-      .status(error.status)
-      .send({ status: false, message: error.message });
+    return res.status(500).send({ status: false, message: error.message });
   }
 };
+
+
 
 exports.memoriesGet = async (req, res) => {
   try {
