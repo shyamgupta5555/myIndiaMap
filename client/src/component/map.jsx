@@ -19,12 +19,39 @@ export function Map() {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
   const [createMemories, setMemories] = useState("");
-  const [position1, setPosition1] = useState({});
+  const [position, setPosition] = useState({});
   const [userData, setUserData] = useState([]);
+
+  const [memories, setMemoriesList] = useState([]);
 
   const mapRef = useRef();
 
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    memories.forEach((m) => {
+      const lat = +m.lat;
+      const lng = +m.lng;
+
+      if (!lat || !lng) {
+        return;
+      }
+      const marker = new window.mappls.Marker({
+        map: mapRef.current,
+        position: {
+          lat,
+          lng,
+        },
+        icon_url: "https://apis.mapmyindia.com/map_v3/1.png",
+      });
+
+      marker.addListener("click", (e) => {
+        console.log(m);
+
+        e.stopPropagation();
+      });
+    });
+  }, [memories]);
 
   const getLatLang = (e) => {
     // console.log(e.lngLat);
@@ -35,13 +62,7 @@ export function Map() {
       lng: e.lngLat.lng,
     };
 
-    setPosition1(position);
-
-    new window.mappls.Marker({
-      map: mapRef.current,
-      position: position,
-      icon_url: "https://apis.mapmyindia.com/map_v3/1.png",
-    });
+    setPosition(position);
 
     setData((data) => [...data, position]);
   };
@@ -75,14 +96,12 @@ export function Map() {
     axios
       .get("http://localhost:5000/api/users/memories", { headers })
       .then((response) => {
-         setUserData(response.data.data);
-        console.log(response.data.data);
+        setMemoriesList(response.data.data);
       })
       .catch((error) => {
         console.log(error.message);
       });
   }, []);
-  
 
   useEffect(() => {
     if (!localStorage.getItem("token")) {
@@ -96,8 +115,8 @@ export function Map() {
     e.preventDefault();
 
     const obj = {
-      lat: position1.lat,
-      lng: position1.lng,
+      lat: position.lat,
+      lng: position.lng,
       userId: localStorage.getItem("id"),
       content: createMemories,
     };
@@ -145,10 +164,10 @@ export function Map() {
           </span>
 
           <span style={{ "padding-left": "10px" }}>
-            <h6>lat:{position1.lat}</h6>
+            <h6>lat:{position.lat}</h6>
           </span>
           <span style={{ "padding-left": "10px" }}>
-            <h6>lng :{position1.lng}</h6>
+            <h6>lng :{position.lng}</h6>
           </span>
         </div>
         <hr></hr>
