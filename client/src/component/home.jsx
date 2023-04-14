@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Route, useNavigate, NavLink } from "react-router-dom";
-import axios from "axios";
+import { api } from "../ApiCall";
 
 import {
   TextField,
@@ -15,8 +15,6 @@ import {
 import LockIcon from "@mui/icons-material/Lock";
 import { Link } from "react-router-dom";
 
-
-
 export function Home() {
   const navigate = useNavigate();
   let [email, setEmail] = useState("");
@@ -25,10 +23,11 @@ export function Home() {
 
   const paperStyle = {
     padding: 20,
-    height: "75vh",
+    height: "80vh",
     align: "center",
     width: 500,
     margin: "20px auto",
+    borderRadius: "60px",
   };
 
   const handelSubmit = async (e) => {
@@ -36,14 +35,11 @@ export function Home() {
     e.preventDefault();
     setError(validate(obj));
 
-    axios
-      .post("http://localhost:5000/api/accounts/login", obj)
+    api.post("accounts/login", obj)
       .then((response) => {
         const token = response.data.token;
         localStorage.setItem("token", token);
-        localStorage.setItem( "id",response.data.id);
-        console.log(response.data)
-
+        console.log(response.data);
         if (response) navigate("/map");
       })
 
@@ -63,28 +59,44 @@ export function Home() {
     }
   };
 
-  const avatarStyle = { backgroundColor: "#1bbd7e" };
+  const avatarStyle = {
+    backgroundColor: "#1bbd7e",
+    width: "50%",
+    height: "50%",
+  };
+
   return (
     <div>
+      {error && (
+        <p
+          style={{ textAlign: "center" }}
+          className="alert alert-danger center "
+        >
+          {error}
+        </p>
+      )}
       <div>
         <Grid>
           <Paper elevation={10} style={paperStyle}>
             <Grid align="center">
-              <Avatar style={avatarStyle}>
-                <LockIcon />
-              </Avatar>
+              <Avatar
+                alt="Remy Sharp"
+                src="https://thumbs.dreamstime.com/z/image-pretty-women-joyful-expressions-smile-broadly-point-each-other-thumbs-feel-overjoyed-wear-image-pretty-200280613.jpg"
+                style={avatarStyle}
+              ></Avatar>
             </Grid>
             <br />
-            <h1 style={{ "text-align": "center" }}>LogIn</h1>
+            <h1 style={{ textAlign: "center" }}>LogIn</h1>
             <div style={{ padding: "30px" }}>
               <br />
-              {error && <p className="alert alert-danger">{error}</p>}
+
               <TextField
                 variant="outlined"
                 label="Email"
                 type="email"
                 value={email}
                 fullWidth
+                required
                 onChange={(e) => {
                   setEmail(e.target.value);
                 }}
@@ -96,6 +108,7 @@ export function Home() {
                 label="Password"
                 type="password"
                 fullWidth
+                required
                 value={password}
                 onChange={(e) => {
                   setPassword(e.target.value);

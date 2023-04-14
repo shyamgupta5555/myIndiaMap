@@ -9,11 +9,11 @@ import {
   FormControlLabel,
   Checkbox,
   Typography,
+  AvatarGroup,
 } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { Link } from "react-router-dom";
-import axios from "axios";
-import { Card1 } from "./showMemories";
+import { api } from "../ApiCall";
 
 export function SignUp() {
   let navigate = useNavigate();
@@ -26,25 +26,28 @@ export function SignUp() {
 
   const paperStyle = {
     padding: 20,
-    height: "95vh",
+    height: "90vh",
     align: "center",
     width: 400,
-    margin: "20px auto",
+    margin: "20px auto ",
+    borderRadius: "60px",
   };
 
   const handel = async (e) => {
-    e.preventDefault();
     let obj = { name: name, email: email, password: password, phone: phone };
-    console.log(obj);
 
-    axios
-      .post("http://localhost:5000/api/accounts/register", obj)
+    if (password != confPassword) {
+      return setError(" Conform password wrong please input again");
+    }
+    e.preventDefault();
+    api
+      .post("/accounts/register", obj)
       .then((response) => {
         setError("");
-        console.log(response.data)
+        console.log(response.data);
         localStorage.setItem("id", response.data._id);
-        
-        if (response) navigate("/map");
+
+        if (response) navigate("/login");
       })
       .catch((error) => {
         setError(error.response.data.message);
@@ -55,26 +58,51 @@ export function SignUp() {
   const avatarStyle = { backgroundColor: "#1bbd7e" };
 
   return (
-    <div>
-    {/* <Card1 /> */}
+    <div
+      style={{
+        borderRadius: "200px",
+      }}
+    >
+      {error && (
+        <p style={{ textAlign: "center" }} className="alert alert-danger">
+          {error}
+        </p>
+      )}
       <Grid>
         <Paper elevation={10} style={paperStyle}>
           <Grid align="center">
-            <Avatar style={avatarStyle}>
-              <AddCircleOutlineIcon />
-            </Avatar>
+            <AvatarGroup
+              total={1000}
+              className="d-flex justify-content-center "
+              style={{ width: "100%" }}
+            >
+              <Avatar
+                alt="Remy Sharp"
+                src="https://imglarger.com/Images/before-after/ai-image-enlarger-1-before-2.jpg"
+                style={avatarStyle}
+              ></Avatar>
+              <Avatar
+                alt="Remy Sharp"
+                src="https://image.shutterstock.com/image-photo/young-handsome-man-beard-wearing-260nw-1768126784.jpg"
+                style={avatarStyle}
+              ></Avatar>
+              <Avatar
+                alt="Remy Sharp"
+                src="https://img.freepik.com/free-photo/young-beautiful-woman-pink-warm-sweater-natural-look-smiling-portrait-isolated-long-hair_285396-896.jpg"
+                style={avatarStyle}
+              ></Avatar>
+              <Avatar
+                alt="Remy Sharp"
+                src="https://img.freepik.com/premium-photo/young-business-arab-woman-isolated-againstwhite-pointing-with-forefingersa-expressing-excitement-desire_1187-23653.jpg"
+                style={avatarStyle}
+              ></Avatar>
+            </AvatarGroup>
           </Grid>
           <br />
-          <h1 style={{ "text-align": "center" }}>Create Account</h1>
-          <div
-            style={{
-              width: 300,
-              "border-radius": "30px",
-              "padding-left": "50px",
-            }}
-          >
-            {error && <p className="alert alert-danger">{error}</p>}
-
+          <h1 style={{ textAlign: "center" }} autoFocus>
+            Create Account
+          </h1>
+          <div style={{ padding: "20px" }}>
             <TextField
               variant="outlined"
               label="name"

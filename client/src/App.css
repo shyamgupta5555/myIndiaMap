@@ -14,6 +14,22 @@
   font-size: calc(10px + 2vmin);
   color: white;
 } */
+/* 
+@font-face {
+  font-family: 'Lato';
+  src: local('Lato'), url(./fonts/Lato-Regular.otf) format('opentype');
+}
 
+@font-face {
+    font-family: 'Lato';
+    font-weight: 900;
+    src: local('Lato'), url(./fonts/Lato-Bold.otf) format('opentype');
+}
+
+@font-face {
+    font-family: 'Lato';
+    font-weight: 900;
+    src: local('Lato'), url(./fonts/Lato-Black.otf) format('opentype');
+} */
 
 

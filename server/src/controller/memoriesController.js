@@ -8,18 +8,58 @@ const { memoriesSchema, memoriesUp } = require("../validation/validation");
 exports.memoriesCreate = async (req, res) => {
   try {
     let data = req.body;
-    // await memoriesSchema.validateAsync(data);
+    console.log(data)
     data.userId = req.id;
-    console.log(data);
 
     const create = await memoriesModel.create(data);
-    console.log(create);
+
     return res.status(201).send({ data: create });
+
   } catch (error) {
     if (error.isJoi == true) error.status = 400;
+    console.log(error.message)
     return res.status(500).send({ message: error.message });
   }
 };
+
+
+
+exports.memoriesGet = async (req, res) => {
+  try {
+    let id = req.id;
+    const get = await memoriesModel.find({ userId: id, isDeleted: false });
+    return res.status(200).send({ data: get });
+  } catch (err) {
+    return res.status(500).send({ message: err.message });
+  }
+};
+
+
+exports.memoriesDelete = async (req, res) => {
+  try {
+    const id = req.params.id;
+    if (!ObjectId.isValid(id))
+      return res.status(400).send({ message: "please send valid object id " });
+
+    const memoriesDelete = await memoriesModel.findByIdAndUpdate(
+      {
+        _id: id,
+      },
+      {
+        isDeleted: true,
+      },
+      { new: true }
+    );
+    if (!memoriesDelete)
+      return res
+        .status(404)
+        .send({ message: "this id not exist our data base" });
+    return res.status(200).send({ message: "successfully deleted" });
+  } catch (err) {
+    return res.status(500).send({ message: err.message });
+  }
+};
+
 
 exports.memoriesUpdate = async (req, res) => {
   try {
@@ -43,43 +83,5 @@ exports.memoriesUpdate = async (req, res) => {
   } catch (error) {
     if (error.isJoi == true) error.status = 400;
     return res.status(500).send({ status: false, message: error.message });
-  }
-};
-
-
-
-exports.memoriesGet = async (req, res) => {
-  try {
-    let id = req.id;
-    const get = await memoriesModel.find({ userId: id, isDeleted: false });
-    return res.status(200).send({ data: get });
-  } catch (err) {
-    return res.status(500).send({ message: err.message });
-  }
-};
-
-exports.memoriesDelete = async (req, res) => {
-  try {
-    const id = req.params.id;
-    if (!ObjectId.isValid(id))
-      return res.status(400).send({ message: "please send valid object id " });
-
-    const memoriesDelete = await memoriesModel.findOneAndUpdate(
-      {
-        _id: id,
-        isDeleted: false,
-      },
-      {
-        isDeleted: true,
-      },
-      { new: true }
-    );
-    if (!memoriesDelete)
-      return res
-        .status(404)
-        .send({ message: "this id not exist our data base" });
-    return res.status(200).send({ message: "successfully deleted" });
-  } catch (err) {
-    return res.status(500).send({ message: err.message });
   }
 };

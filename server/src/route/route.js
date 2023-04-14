@@ -16,7 +16,7 @@ route.post("/api/accounts/login", login);
 route.post("/api/users/memories",authentication, authorization, memoriesCreate);
 route.get("/api/users/memories",  authentication,  memoriesGet);
 
-route.put("/api/users/memories/:id", authentication,  authorization, memoriesUpdate);
+
 
 route.delete("/api/users/memories/:id", authentication,  authorization ,memoriesDelete);
 
