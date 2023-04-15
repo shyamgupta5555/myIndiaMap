@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Chip,
   DialogActions,
@@ -22,6 +21,7 @@ export function Map() {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
   const [createMemories, setMemories] = useState(""); // create memories data store
+  const [image, setImage] = useState("");
   const [position, setPosition] = useState({}); // position lat ,lng
   const [memories, setMemoriesList] = useState([]); //all list get memories
   const [show, setShow] = useState(false); // memories show out put
@@ -30,9 +30,7 @@ export function Map() {
   const [shortMemories, setShortMemories] = useState(""); //on click one memories show
   const decoded = jwtDecode(localStorage.getItem("token"));
 
-let d = false
   useEffect(() => {
-
     memories.forEach((m) => {
       const lat = +m.lat;
       const lng = +m.lng;
@@ -51,12 +49,8 @@ let d = false
         setShortMemories(m);
         setShow(true);
       });
-
     });
-
-  }, []);
-
-  
+  }, [memories]);
 
   const getLatLang = (e) => {
     setOpen(true);
@@ -66,18 +60,16 @@ let d = false
     };
     setPosition(position);
 
-    if(d == true){
     const marker = new window.mappls.Marker({
       map: mapRef.current,
-      position: position,
+      // position: position,
       icon_url: "https://apis.mapmyindia.com/map_v3/1.png",
     });
     setPosition(position);
-    
-    setData((data) => [...data, position]);
-  };
-}
 
+    setData((data) => [...data, position]);
+    
+  };
 
   const initMap = useCallback(() => {
     mapRef.current = new window.mappls.Map("map", {
@@ -86,13 +78,12 @@ let d = false
     mapRef.current?.addListener?.("click", getLatLang);
   }, []);
 
-  
   function loadScript() {
     const script = document.createElement("script");
     script.type = "text/javascript";
 
     script.src =
-      "https://apis.mappls.com/advancedmaps/api/9466c4e9-9ec3-4dd1-b132-884bf0cc05e3/map_sdk?v=3.0&layer=vector";
+      "https://apis.mappls.com/advancedmaps/api/bd81636ee13e89bb1ca168f03e430182/map_sdk?v=3.0&layer=vector";
 
     script.id = "googleMaps";
     document.body.appendChild(script);
@@ -101,10 +92,8 @@ let d = false
     };
   }
 
-  
-
   useEffect(() => {
-   api
+    api
       .get("/users/memories")
       .then((response) => {
         setMemoriesList(response.data.data);
@@ -115,7 +104,7 @@ let d = false
         }
         console.log(error.message);
       });
-  }, [mapRef]);
+  }, [open]);
 
   useEffect(() => {
     if (!localStorage.getItem("token")) {
@@ -133,14 +122,21 @@ let d = false
       userId: decoded.id,
       content: createMemories,
     };
+
+    const formData = new FormData();
+    formData.append("lat", position.lat);
+    formData.append("lng", position.lng);
+    formData.append("userId", decoded.id);
+    formData.append("content", createMemories);
+    formData.append("Image", image);
+
     setOpen(false);
     setMemories("");
 
     api
-      .post("/users/memories", obj)
+      .post("/users/memories", formData)
       .then((response) => {
         console.log(response.data);
-        d= true
       })
       .catch((error) => {
         if (error.response.data.message == "jwt expired") {
@@ -149,7 +145,6 @@ let d = false
         console.log(error.response.data.message);
       });
   }
-
 
   function handleDeleted() {
     api
@@ -161,10 +156,9 @@ let d = false
         console.log(error);
       });
     setShow(false);
-
   }
 
-  console.log(memories);
+  console.log(shortMemories);
 
   return (
     <>
@@ -187,8 +181,11 @@ let d = false
         <hr></hr>
         <div style={{ paddingLeft: "20px", display: "flex" }}>
           <Avatar
-            alt="Remy Sharp"
-            src="https://imglarger.com/Images/before-after/ai-image-enlarger-1-before-2.jpg"
+            alt={decoded.name}
+            src={decoded.profileImage}
+            onClick={() => {
+              navigate("/profile");
+            }}
           />
           <span style={{ paddingLeft: "20px " }}>
             <h3>{decoded.name.toUpperCase()}</h3>
@@ -199,7 +196,7 @@ let d = false
         </footer>
         <hr></hr>
         <span className="text-center text-muted">{shortMemories.content}</span>
-
+        <img src={shortMemories.Image} alt="not found" />
         <hr></hr>
         <DialogActions>
           <Chip
@@ -234,15 +231,21 @@ let d = false
           Add Memories & Review
         </DialogTitle>
         <span style={{ paddingLeft: "20px " }}>⭐⭐⭐⭐⭐</span>
+        <span>
+          <Link to="/profile">show all photo</Link>
+        </span>
         <hr></hr>
         <div style={{ paddingLeft: "20px", display: "flex" }}>
           <Avatar
             alt={decoded.name}
-            src="https://imglarger.com/Images/before-after/ai-image-enlarger-1-before-2.jpg"
-            style={{ width: "10%", height: "10%" }}
+            src={decoded.profileImage}
+            style={{ width: "20%", height: "20%" }}
+            onClick={() => {
+              navigate("/profile");
+            }}
           ></Avatar>
           <span style={{ paddingLeft: "20px " }}>
-            <h3>{decoded.name.toUpperCase()}</h3>
+            <h3>{decoded.name}</h3>
           </span>
           <div
             style={{
@@ -260,7 +263,13 @@ let d = false
           </div>
         </div>
         <hr></hr>
-
+        <input
+          id="photo-upload"
+          type="file"
+          onChange={(e) => {
+            setImage(e.target.files[0]);
+          }}
+        />
         <DialogContent>
           <DialogContentText></DialogContentText>
           <Grid>

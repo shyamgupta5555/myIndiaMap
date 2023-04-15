@@ -2,7 +2,8 @@
 import axios from "axios";
 
 export const api =axios.create({
-  baseURL :"http://localhost:5000/api",
+  baseURL :process.env.REACT_APP_BASE_URL,
+  // baseURL: "https://snow-ritzy-boysenberry.glitch.me/api"
 
 })
 

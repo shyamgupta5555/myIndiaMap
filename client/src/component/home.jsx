@@ -12,8 +12,7 @@ import {
   Checkbox,
   Typography,
 } from "@mui/material";
-import LockIcon from "@mui/icons-material/Lock";
-import { Link } from "react-router-dom";
+
 
 export function Home() {
   const navigate = useNavigate();
@@ -23,7 +22,7 @@ export function Home() {
 
   const paperStyle = {
     padding: 20,
-    height: "80vh",
+    height: "95vh",
     align: "center",
     width: 500,
     margin: "20px auto",
@@ -35,7 +34,8 @@ export function Home() {
     e.preventDefault();
     setError(validate(obj));
 
-    api.post("accounts/login", obj)
+    api
+      .post("accounts/login", obj)
       .then((response) => {
         const token = response.data.token;
         localStorage.setItem("token", token);
@@ -61,8 +61,8 @@ export function Home() {
 
   const avatarStyle = {
     backgroundColor: "#1bbd7e",
-    width: "50%",
-    height: "50%",
+    width: "60%",
+    height: "60%",
   };
 
   return (
@@ -89,7 +89,6 @@ export function Home() {
             <h1 style={{ textAlign: "center" }}>LogIn</h1>
             <div style={{ padding: "30px" }}>
               <br />
-
               <TextField
                 variant="outlined"
                 label="Email"
@@ -129,9 +128,7 @@ export function Home() {
               Sign in
             </Button>
             <br />
-            <Typography>
-              <Link href="#">Forget password ?</Link>
-            </Typography>
+
             <br />
 
             <NavLink to="/signup">Sign Up</NavLink>

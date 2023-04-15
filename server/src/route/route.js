@@ -17,7 +17,6 @@ route.post("/api/users/memories",authentication, authorization, memoriesCreate);
 route.get("/api/users/memories",  authentication,  memoriesGet);
 
 
-
 route.delete("/api/users/memories/:id", authentication,  authorization ,memoriesDelete);
 
 

@@ -2,11 +2,12 @@ const express = require("express");
 const mongoose = require("mongoose");
 const route = require("./route/route");
 const cors = require("cors");
-const env = require("dotenv");
+const multer = require("multer")
 const app = express();
 app.use(express.json());
 
 app.use(cors());
+app.use(multer().any())
 mongoose
   .connect(
     "mongodb+srv://shyamgupta:.T!8NRrzf6FyMYc@cluster0.dbdyccj.mongodb.net/mapproject"

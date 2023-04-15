@@ -23,10 +23,11 @@ export function SignUp() {
   const [confPassword, setConfPassword] = useState("");
   const [phone, setPhone] = useState("");
   const [error, setError] = useState("");
-
+ const [image ,setImage] = useState("")
+ 
   const paperStyle = {
     padding: 20,
-    height: "90vh",
+    height: "100vh",
     align: "center",
     width: 400,
     margin: "20px auto ",
@@ -34,14 +35,16 @@ export function SignUp() {
   };
 
   const handel = async (e) => {
-    let obj = { name: name, email: email, password: password, phone: phone };
+     const formData = new FormData()
+     formData.append("name" ,name)
+     formData.append("email" ,email)
+     formData.append("password" ,password)
+     formData.append("phone" ,phone)
+     formData.append("Image" ,image)
 
-    if (password != confPassword) {
-      return setError(" Conform password wrong please input again");
-    }
     e.preventDefault();
     api
-      .post("/accounts/register", obj)
+      .post("/accounts/register", formData)
       .then((response) => {
         setError("");
         console.log(response.data);
@@ -152,7 +155,7 @@ export function SignUp() {
             />
             <br />
             <br />
-            <TextField
+            {/* <TextField
               variant="filled"
               label="ConformPassword"
               type="password"
@@ -161,8 +164,11 @@ export function SignUp() {
               onChange={(e) => {
                 setConfPassword(e.target.value);
               }}
-            />
+            /> */}
           </div>
+            <input id="photo-upload" type="file" onChange={(e)=>{
+              setImage(e.target.files[0])
+            }} /> 
           <FormControlLabel
             control={<Checkbox name="checkedB" color="primary" />}
             label="I am accepted term and condition"
@@ -180,7 +186,7 @@ export function SignUp() {
           </Button>
           <br />
           <br />
-          <NavLink to="/">already account create</NavLink>
+          <NavLink to="/login">already account create</NavLink>
         </Paper>
       </Grid>
     </div>

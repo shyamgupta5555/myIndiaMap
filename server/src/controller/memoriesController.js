@@ -4,24 +4,32 @@ const {
   Types: { ObjectId },
 } = mongoose;
 const { memoriesSchema, memoriesUp } = require("../validation/validation");
+const { uploadFile } = require("../aws/fileUpload");
+let validFile = (value) => /\.(jpe?g|png)$/i.test(value);
 
 exports.memoriesCreate = async (req, res) => {
   try {
     let data = req.body;
-    console.log(data)
     data.userId = req.id;
+    const Image = req.files[0];
+
+    if (Image && Image.length === 0) {
+      return res.status(400).send({ message: "please insert profile image!" });
+    }
+    if (!validFile(Image.originalname))
+      return res
+        .status(400)
+        .send({ message: "please select valid  image like jpeg , png ,jpg" });
+
+    let uploadedFileURL = await uploadFile(req.files[0]);
+    data.Image = uploadedFileURL;
 
     const create = await memoriesModel.create(data);
-
     return res.status(201).send({ data: create });
-
   } catch (error) {
-    if (error.isJoi == true) error.status = 400;
-    console.log(error.message)
     return res.status(500).send({ message: error.message });
   }
 };
-
 
 
 exports.memoriesGet = async (req, res) => {
@@ -60,28 +68,3 @@ exports.memoriesDelete = async (req, res) => {
   }
 };
 
-
-exports.memoriesUpdate = async (req, res) => {
-  try {
-    const id = req.params.id;
-    const data = req.body;
-    const { content, lat, lng } = data;
-    console.log(FormData);
-    await memoriesUp.validateAsync(data);
-
-    if (!ObjectId.isValid(id))
-      return res.status(400).send({ message: "please send valid object id " });
-
-    const update = await memoriesModel.findOneAndUpdate(
-      { _id: data.id },
-      data,
-      {
-        new: true,
-      }
-    );
-    return res.status(200).send({ data: update });
-  } catch (error) {
-    if (error.isJoi == true) error.status = 400;
-    return res.status(500).send({ status: false, message: error.message });
-  }
-};

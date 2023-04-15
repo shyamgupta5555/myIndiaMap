@@ -10,6 +10,7 @@ const memoriesCreate = mongoose.Schema(
     },
     lat: { type: String, required: true },
     lng: { type: String, required: true },
+    Image : String,
     isDeleted: { type: Boolean, default: false },
   },
   { timestamps: true }
