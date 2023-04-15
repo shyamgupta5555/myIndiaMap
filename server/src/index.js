@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const path = require("path")
 const route = require("./route/route");
 const cors = require("cors");
 const multer = require("multer")
@@ -22,3 +23,9 @@ mongoose
 app.use("/", route);
 
 app.listen(5000, console.log("Application is running", 5000));
+
+app.get("*",(req,res)=>{
+const files = path.join(__dirname,"../build/index.html")
+res.sendFile(files)
+
+})
