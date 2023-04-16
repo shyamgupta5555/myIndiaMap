@@ -16,10 +16,12 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import { api } from "../ApiCall";
 import jwtDecode from "jwt-decode";
+import { func } from "joi";
 
 export function Map() {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
+  const [mapLoaded, setMapLoaded] = useState(false);
   const [createMemories, setMemories] = useState("");
   const [image, setImage] = useState("");
   const [position, setPosition] = useState({});
@@ -29,10 +31,14 @@ export function Map() {
   const [open, setOpen] = useState(false);
   const [shortMemories, setShortMemories] = useState("");
   const [error, setError] = useState("");
+  const selectedMarker = useRef();
 
   const decoded = jwtDecode(localStorage.getItem("token"));
 
   useEffect(() => {
+    if (!mapLoaded) {
+      return;
+    }
     memories.forEach((m) => {
       const lat = +m.lat;
       const lng = +m.lng;
@@ -47,11 +53,12 @@ export function Map() {
 
       marker.addListener("click", (e) => {
         e.stopPropagation();
+        selectedMarker.current = marker;
         setShortMemories(m);
         setShow(true);
       });
     });
-  }, [memories]);
+  }, [memories, mapLoaded]);
 
   const getLatLang = (e) => {
     setOpen(true);
@@ -61,11 +68,6 @@ export function Map() {
     };
     setPosition(position);
 
-    const marker = new window.mappls.Marker({
-      map: mapRef.current,
-      // position: position,
-      icon_url: "https://apis.mapmyindia.com/map_v3/1.png",
-    });
     setPosition(position);
 
     setData((data) => [...data, position]);
@@ -76,6 +78,8 @@ export function Map() {
       center: { lat: 28.612964, lng: 77.229463 },
     });
     mapRef.current?.addListener?.("click", getLatLang);
+
+    setMapLoaded(true);
   }, []);
 
   function loadScript() {
@@ -89,10 +93,11 @@ export function Map() {
     document.body.appendChild(script);
     script.onload = () => {
       initMap();
+      console.log(window.mappls);
     };
   }
 
-  useEffect(() => {
+  function fetchData() {
     api
       .get("/users/memories")
       .then((response) => {
@@ -102,8 +107,11 @@ export function Map() {
         if (error.response.data.message == "jwt expired") {
           navigate("/login");
         }
-        console.log(error.message);
       });
+  }
+
+  useEffect(() => {
+    fetchData();
   }, [open]);
 
   useEffect(() => {
@@ -114,7 +122,18 @@ export function Map() {
     }
   }, []);
 
-  function handel(e) {
+  function createMarker({ lat, lng }) {
+    const marker = new window.mappls.Marker({
+      map: mapRef.current,
+      position: {
+        lat,
+        lng,
+      },
+      icon_url: "https://apis.mapmyindia.com/map_v3/1.png",
+    });
+  }
+
+  function createMemory(e) {
     e.preventDefault();
     const obj = {
       lat: position.lat,
@@ -136,7 +155,10 @@ export function Map() {
     api
       .post("/users/memories", formData)
       .then((response) => {
-        console.log(response.data);
+        createMarker({
+          lat: position.lat,
+          lng: position.lng,
+        });
       })
       .catch((error) => {
         if (error.response.data.message == "jwt expired") {
@@ -147,7 +169,7 @@ export function Map() {
       });
   }
 
-  function handleDeleted() {
+  function handleDeleted(marker) {
     api
       .delete(`/users/memories/${shortMemories._id}`)
       .then((response) => {
@@ -336,7 +358,11 @@ export function Map() {
             Discard
           </button>
 
-          <button type="button" onClick={handel} className="btn btn-success">
+          <button
+            type="button"
+            onClick={createMemory}
+            className="btn btn-success"
+          >
             Save Memories
           </button>
         </DialogActions>
