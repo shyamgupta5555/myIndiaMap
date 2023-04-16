@@ -23,11 +23,11 @@ export function SignUp() {
   const [confPassword, setConfPassword] = useState("");
   const [phone, setPhone] = useState("");
   const [error, setError] = useState("");
- const [image ,setImage] = useState("")
- 
+  const [image, setImage] = useState("");
+
   const paperStyle = {
     padding: 20,
-    height: "100vh",
+    height: "70%",
     align: "center",
     width: 400,
     margin: "20px auto ",
@@ -35,12 +35,12 @@ export function SignUp() {
   };
 
   const handel = async (e) => {
-     const formData = new FormData()
-     formData.append("name" ,name)
-     formData.append("email" ,email)
-     formData.append("password" ,password)
-     formData.append("phone" ,phone)
-     formData.append("Image" ,image)
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("email", email);
+    formData.append("password", password);
+    formData.append("phone", phone);
+    formData.append("Image", image);
 
     e.preventDefault();
     api
@@ -66,11 +66,6 @@ export function SignUp() {
         borderRadius: "200px",
       }}
     >
-      {error && (
-        <p style={{ textAlign: "center" }} className="alert alert-danger">
-          {error}
-        </p>
-      )}
       <Grid>
         <Paper elevation={10} style={paperStyle}>
           <Grid align="center">
@@ -101,10 +96,16 @@ export function SignUp() {
               ></Avatar>
             </AvatarGroup>
           </Grid>
+
           <br />
           <h1 style={{ textAlign: "center" }} autoFocus>
             Create Account
           </h1>
+          {error && (
+            <p style={{ textAlign: "center" }} className="alert alert-danger">
+              {error}
+            </p>
+          )}
           <div style={{ padding: "20px" }}>
             <TextField
               variant="outlined"
@@ -166,9 +167,13 @@ export function SignUp() {
               }}
             /> */}
           </div>
-            <input id="photo-upload" type="file" onChange={(e)=>{
-              setImage(e.target.files[0])
-            }} /> 
+          <input
+            id="photo-upload"
+            type="file"
+            onChange={(e) => {
+              setImage(e.target.files[0]);
+            }}
+          />
           <FormControlLabel
             control={<Checkbox name="checkedB" color="primary" />}
             label="I am accepted term and condition"

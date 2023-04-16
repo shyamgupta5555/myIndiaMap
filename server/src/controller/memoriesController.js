@@ -31,7 +31,6 @@ exports.memoriesCreate = async (req, res) => {
   }
 };
 
-
 exports.memoriesGet = async (req, res) => {
   try {
     let id = req.id;
@@ -41,7 +40,6 @@ exports.memoriesGet = async (req, res) => {
     return res.status(500).send({ message: err.message });
   }
 };
-
 
 exports.memoriesDelete = async (req, res) => {
   try {
@@ -67,4 +65,3 @@ exports.memoriesDelete = async (req, res) => {
     return res.status(500).send({ message: err.message });
   }
 };
-

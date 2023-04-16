@@ -13,7 +13,6 @@ import {
   Typography,
 } from "@mui/material";
 
-
 export function Home() {
   const navigate = useNavigate();
   let [email, setEmail] = useState("");
@@ -22,7 +21,7 @@ export function Home() {
 
   const paperStyle = {
     padding: 20,
-    height: "95vh",
+    height: "60%",
     align: "center",
     width: 500,
     margin: "20px auto",
@@ -35,7 +34,7 @@ export function Home() {
     setError(validate(obj));
 
     api
-      .post("accounts/login", obj)
+      .post("/accounts/login", obj)
       .then((response) => {
         const token = response.data.token;
         localStorage.setItem("token", token);
@@ -67,14 +66,6 @@ export function Home() {
 
   return (
     <div>
-      {error && (
-        <p
-          style={{ textAlign: "center" }}
-          className="alert alert-danger center "
-        >
-          {error}
-        </p>
-      )}
       <div>
         <Grid>
           <Paper elevation={10} style={paperStyle}>
@@ -89,6 +80,14 @@ export function Home() {
             <h1 style={{ textAlign: "center" }}>LogIn</h1>
             <div style={{ padding: "30px" }}>
               <br />
+              {error && (
+                <p
+                  style={{ textAlign: "center" }}
+                  className="alert alert-danger center "
+                >
+                  {error}
+                </p>
+              )}
               <TextField
                 variant="outlined"
                 label="Email"

@@ -10,11 +10,13 @@ exports.userCreate = async (req, res) => {
   try {
     let data = req.body;
     const { email, phone, password, name } = data;
-    const profileImage =req.files[0]
-   console.log(profileImage)
+    const profileImage = req.files[0];
+
+    console.log(profileImage);
     data.name = name.toUpperCase();
 
-    await userSchema.validateAsync(data);
+    let obj = { email: email, phone: phone, name: name, password: password };
+    await userSchema.validateAsync(obj);
 
     const check = await userModel.findOne({ email: email });
 
@@ -28,10 +30,8 @@ exports.userCreate = async (req, res) => {
       return res.status(400).send({
         message: "This phone number already exist try to next another number",
       });
-
-    if (profileImage && profileImage.length === 0) {
+    if (!profileImage)
       return res.status(400).send({ message: "please insert profile image!" });
-    }
     if (!validFile(profileImage.originalname))
       return res
         .status(400)
@@ -39,7 +39,7 @@ exports.userCreate = async (req, res) => {
 
     let uploadedFileURL = await uploadFile(req.files[0]);
     data.profileImage = uploadedFileURL;
-    
+
     console.log(uploadFile);
 
     const passwordHas = await bcrypt.hash(password, 10);
@@ -68,7 +68,7 @@ exports.login = async (req, res) => {
       return res.status(400).send({ message: "password is wrong" });
 
     const token = jwt.sign(
-      { id: check._id, name: check.name ,profileImage :check.profileImage },
+      { id: check._id, name: check.name, profileImage: check.profileImage },
       "operationFrontend",
       { expiresIn: "1h" }
     );

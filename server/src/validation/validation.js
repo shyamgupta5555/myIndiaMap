@@ -5,7 +5,6 @@ exports.userSchema = joi.object({
   phone: joi.string().regex(/[0-9]/).min(10).max(10).required(),
   email: joi.string().email().required(),
   password: joi.string().min(8).max(16),
-  profileImage :joi.string()
 });
 
 exports.loginSchema = joi.object({

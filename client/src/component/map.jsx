@@ -29,6 +29,7 @@ export function Map() {
   const [open, setOpen] = useState(false); // memories create popup
   const [shortMemories, setShortMemories] = useState(""); //on click one memories show
   const decoded = jwtDecode(localStorage.getItem("token"));
+  const [error, setError] = useState("");
 
   useEffect(() => {
     memories.forEach((m) => {
@@ -68,7 +69,6 @@ export function Map() {
     setPosition(position);
 
     setData((data) => [...data, position]);
-    
   };
 
   const initMap = useCallback(() => {
@@ -142,6 +142,7 @@ export function Map() {
         if (error.response.data.message == "jwt expired") {
           navigate("/login");
         }
+        setError(error.message.data.message);
         console.log(error.response.data.message);
       });
   }
@@ -160,6 +161,10 @@ export function Map() {
 
   console.log(shortMemories);
 
+  function showAllMemories() {
+    navigate("/profile");
+  }
+
   return (
     <>
       <div
@@ -174,9 +179,7 @@ export function Map() {
         open={show}
         onClose={() => setShow(false)}
       >
-        <DialogTitle style={{ color: "red" }}>
-          Add Memories & Review
-        </DialogTitle>
+        <DialogTitle style={{ color: "red" }}>Memories</DialogTitle>
         <span style={{ paddingLeft: "20px" }}>⭐⭐⭐⭐⭐</span>
         <hr></hr>
         <div style={{ paddingLeft: "20px", display: "flex" }}>
@@ -186,6 +189,7 @@ export function Map() {
             onClick={() => {
               navigate("/profile");
             }}
+            style={{ width: "17%", height: "30%" }}
           />
           <span style={{ paddingLeft: "20px " }}>
             <h3>{decoded.name.toUpperCase()}</h3>
@@ -195,18 +199,48 @@ export function Map() {
           Save and share memories <cite title="Source Title">With Mapples</cite>
         </footer>
         <hr></hr>
-        <span className="text-center text-muted">{shortMemories.content}</span>
-        <img src={shortMemories.Image} alt="not found" />
+        <img
+          src={shortMemories.Image}
+          style={{ width: "200px", alignItems: "center" }}
+          alt="not found"
+        />
         <hr></hr>
-        <DialogActions>
-          <Chip
-            className="margin-right: 1rem  "
-            label="Custom delete icon"
-            onClick={handleDeleted}
-            onDelete={handleDeleted}
-            deleteIcon={<DeleteIcon />}
-            variant="outlined"
+        <span className="text-center text-muted">{shortMemories.content}</span>
+        <hr></hr>
+
+        <Chip
+          className="success"
+          label="Custom delete icon"
+          onClick={handleDeleted}
+          onDelete={handleDeleted}
+          deleteIcon={<DeleteIcon />}
+          variant="outlined"
+        />
+        <button
+          type="button"
+          onClick={() => {
+            setShow(false);
+          }}
+          className="btn btn-danger m-5"
+        >
+          Discard
+        </button>
+
+        <DialogActions className="m-0 p-0"></DialogActions>
+
+        {/* <div className="card" style={{ width: "18rem" }}>
+          <img
+            className="card-img-top"
+            alt={decoded.name}
+            src={decoded.profileImage}
+            style={{ width: "100%" }}
           />
+          <div className="card-body">
+            <p className="card-text">
+              Some quick example text to build on the card title and make up the
+              bulk of the card's content.
+            </p>
+          </div>
           <button
             type="button"
             onClick={() => {
@@ -216,7 +250,7 @@ export function Map() {
           >
             Discard
           </button>
-        </DialogActions>
+        </div> */}
       </Dialog>
 
       {/* //////////////////////////////// */}
@@ -225,21 +259,19 @@ export function Map() {
         fullWidth
         open={open}
         onClose={() => setOpen(false)}
+        style={{ width: "100%" }}
       >
         <DialogTitle style={{ color: "red" }}>
           {" "}
           Add Memories & Review
         </DialogTitle>
         <span style={{ paddingLeft: "20px " }}>⭐⭐⭐⭐⭐</span>
-        <span>
-          <Link to="/profile">show all photo</Link>
-        </span>
         <hr></hr>
         <div style={{ paddingLeft: "20px", display: "flex" }}>
           <Avatar
             alt={decoded.name}
             src={decoded.profileImage}
-            style={{ width: "20%", height: "20%" }}
+            style={{ width: "17%", height: "30%" }}
             onClick={() => {
               navigate("/profile");
             }}
@@ -262,6 +294,13 @@ export function Map() {
             </span>
           </div>
         </div>
+        <hr></hr>
+        {error && (
+          <p style={{ textAlign: "center" }} className="alert alert-danger">
+            {error}
+          </p>
+        )}
+        <Button onClick={showAllMemories}> Show All Memories</Button>
         <hr></hr>
         <input
           id="photo-upload"
