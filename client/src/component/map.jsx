@@ -19,7 +19,7 @@ import jwtDecode from "jwt-decode";
 
 export function Map() {
   const navigate = useNavigate();
-  // const [data, setData] = useState([]);
+  const [data, setData] = useState([]);
   const [createMemories, setMemories] = useState("");
   const [image, setImage] = useState("");
   const [position, setPosition] = useState({});
