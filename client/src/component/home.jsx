@@ -78,8 +78,10 @@ export function Home() {
             </Grid>
             <br />
             <h1 style={{ textAlign: "center" }}>LogIn</h1>
+            <hr></hr>
             <div style={{ padding: "30px" }}>
               <br />
+
               {error && (
                 <p
                   style={{ textAlign: "center" }}

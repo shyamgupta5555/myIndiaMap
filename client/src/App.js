@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
- 
 
 import { Route, Routes, useNavigate } from "react-router-dom";
 import "./App.css";
@@ -9,7 +8,6 @@ import { Home } from "./component/home";
 
 import { Boxx } from "./component/Box";
 
-console.log(process.env)
 function App() {
   return (
     <>

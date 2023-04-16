@@ -20,32 +20,28 @@ export function Boxx() {
         console.log(error.message);
       });
   }, []);
-  console.log(memoriesImage);
 
   return (
-    // <>
-
-    // </>
     <div>
-    <div className="row mx-auto">
-      {memoriesImage &&
-        memoriesImage.map((t) => (
-          <div className="mx-auto col-lg-3 col-sm-10 mt-3 col-md-5">
-            <div className="card" style={{ width: "19rem" }}>
-              <img className="card-img-top" src={t.Image} alt="Card image cap"
-               style={{ width: "300px",height:"300px" }}
-               />
-              <div className="card-body">
-                <p className="card-text">
-                 {t.content}
-                </p>
+      <div className="row mx-auto">
+        {memoriesImage &&
+          memoriesImage.map((t) => (
+            <div className="mx-auto col-lg-3 col-sm-10 mt-3 col-md-5">
+              <div className="card" style={{ width: "19rem" }}>
+                <img
+                  className="card-img-top"
+                  src={t.Image}
+                  alt="Card image cap"
+                  style={{ width: "300px", height: "300px" }}
+                />
+                <div className="card-body">
+                  <p className="card-text">{t.content}</p>
+                </div>
               </div>
             </div>
-          </div>
-          
-        ))}
+          ))}
+      </div>
     </div>
-   </div>
   );
 }
 

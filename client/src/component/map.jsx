@@ -19,17 +19,18 @@ import jwtDecode from "jwt-decode";
 
 export function Map() {
   const navigate = useNavigate();
-  const [data, setData] = useState([]);
-  const [createMemories, setMemories] = useState(""); // create memories data store
+  // const [data, setData] = useState([]);
+  const [createMemories, setMemories] = useState("");
   const [image, setImage] = useState("");
-  const [position, setPosition] = useState({}); // position lat ,lng
-  const [memories, setMemoriesList] = useState([]); //all list get memories
-  const [show, setShow] = useState(false); // memories show out put
+  const [position, setPosition] = useState({});
+  const [memories, setMemoriesList] = useState([]);
+  const [show, setShow] = useState(false);
   const mapRef = useRef();
-  const [open, setOpen] = useState(false); // memories create popup
-  const [shortMemories, setShortMemories] = useState(""); //on click one memories show
-  const decoded = jwtDecode(localStorage.getItem("token"));
+  const [open, setOpen] = useState(false);
+  const [shortMemories, setShortMemories] = useState("");
   const [error, setError] = useState("");
+
+  const decoded = jwtDecode(localStorage.getItem("token"));
 
   useEffect(() => {
     memories.forEach((m) => {
@@ -45,7 +46,6 @@ export function Map() {
       });
 
       marker.addListener("click", (e) => {
-        console.log(m);
         e.stopPropagation();
         setShortMemories(m);
         setShow(true);
@@ -158,8 +158,6 @@ export function Map() {
       });
     setShow(false);
   }
-
-  console.log(shortMemories);
 
   function showAllMemories() {
     navigate("/profile");
