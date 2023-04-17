@@ -88,7 +88,7 @@
 
 ## Memories API (authentication required /  create,get and delete )
 
-### POST /FIle
+### POST /memories
 
 - Create a file document from request body.
 - Upload file image to S3 bucket and save image public url in document.
