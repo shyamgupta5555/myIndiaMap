@@ -91,8 +91,8 @@
 ### POST /memories
 
 - Create a file document from request body.
-- Upload file image to S3 bucket and save image public url in document.
-- Upload file path to S3 bucket and save image public url in document.
+- Upload image to S3 bucket and save image public url in document.
+- Upload  image S3 bucket and save image public url in document.
 - **Response format**
 
 ```yaml
