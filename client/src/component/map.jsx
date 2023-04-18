@@ -248,29 +248,6 @@ export function Map() {
 
         <DialogActions className="m-0 p-0"></DialogActions>
 
-        {/* <div className="card" style={{ width: "18rem" }}>
-          <img
-            className="card-img-top"
-            alt={decoded.name}
-            src={decoded.profileImage}
-            style={{ width: "100%" }}
-          />
-          <div className="card-body">
-            <p className="card-text">
-              Some quick example text to build on the card title and make up the
-              bulk of the card's content.
-            </p>
-          </div>
-          <button
-            type="button"
-            onClick={() => {
-              setShow(false);
-            }}
-            className="btn btn-danger m-5"
-          >
-            Discard
-          </button>
-        </div> */}
       </Dialog>
 
       {/* //////////////////////////////// */}
