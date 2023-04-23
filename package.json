@@ -8,7 +8,7 @@
     "dev": " npx nodemon server/src/index.js",
     "client": "cd client && npm start",
     "client-install": "cd client && npm install",
-    "build": "npm install && cd client && npm install && npm run build && mv build '../server/build'"
+    "build": "npm install && cd client && npm install && npm run build && mv build '../server/'"
   },
   "engines": {
     "npm": ">=8.0.0 <9.0.0",
