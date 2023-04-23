@@ -23,7 +23,6 @@
     "node": "",
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "postbuild": "mv build '../server/build'",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

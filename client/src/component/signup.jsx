@@ -1,18 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { Route, NavLink, useNavigate } from "react-router-dom";
 import {
-  TextField,
+  Avatar,
+  AvatarGroup,
+  Button,
+  Checkbox,
+  FormControlLabel,
   Grid,
   Paper,
-  Avatar,
-  Button,
-  FormControlLabel,
-  Checkbox,
-  Typography,
-  AvatarGroup,
+  TextField
 } from "@mui/material";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 import { api } from "../ApiCall";
 
 export function SignUp() {

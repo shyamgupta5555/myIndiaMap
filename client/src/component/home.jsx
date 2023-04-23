@@ -1,16 +1,15 @@
 import React, { useState } from "react";
-import { Route, useNavigate, NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { api } from "../ApiCall";
 
 import {
-  TextField,
-  Grid,
-  Paper,
   Avatar,
   Button,
-  FormControlLabel,
   Checkbox,
-  Typography,
+  FormControlLabel,
+  Grid,
+  Paper,
+  TextField
 } from "@mui/material";
 
 export function Home() {

@@ -1,22 +1,20 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import DeleteIcon from "@mui/icons-material/Delete";
 import {
+  Avatar,
+  Button,
   Chip,
-  DialogActions,
   Dialog,
-  DialogTitle,
+  DialogActions,
   DialogContent,
   DialogContentText,
-  Paper,
-  Button,
+  DialogTitle,
   Grid,
-  TextField,
-  Avatar,
+  Paper
 } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { api } from "../ApiCall";
 import jwtDecode from "jwt-decode";
-import { func } from "joi";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { api } from "../ApiCall";
 
 export function Map() {
   const navigate = useNavigate();
