@@ -2,7 +2,7 @@
 
 ## Project - MapMyIndia
 
-### Project Link ==>  https://mapmyindia.onrender.com
+### Project Link ==>  https://mapmyindia.onrender.com/
 ### Overview - A map user visit any place to add memories that location and add videos
 ### frist  to user login than to create own memories Unauthorized user can not create memories.
 
